@@ -1,0 +1,31 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set GITHUB_REPO_URL env var
+        run: |
+          echo "GITHUB_REPO_URL=https://github.com/${{ github.repository }}/raw/refs/heads/main" >> $GITHUB_ENV
+
+      - name: Replace GITHUB_REPO_URL placeholders in all .js files
+        run: |
+          # Use 'sed' to replace placeholders in all .js files
+          find . -name "*.js" -type f -exec sed -i 's|\${{ GITHUB_REPO_URL }}|'"$GITHUB_REPO_URL"'|g' {} +
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v2
