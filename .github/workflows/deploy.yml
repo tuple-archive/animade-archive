@@ -29,5 +29,8 @@ jobs:
           # Use 'sed' to replace placeholders in all .js files
           find . -name "*.js" -type f -exec sed -i 's|${GITHUB_REPO_URL}|'"$GITHUB_REPO_URL"'|g' {} +
 
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
